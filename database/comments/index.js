@@ -29,7 +29,7 @@ function insertComment (comment) {
     const id = uuid()
     const sql = `
     INSERT INTO comments (comment_id, user_id, post_id, content, create_date, file_name)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?)
     `
     const params = [id, userId, postId, content, createdAt, fileName]
     conn.query(sql, params)
