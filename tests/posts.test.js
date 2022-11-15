@@ -28,8 +28,11 @@ describe('Posts', () => {
     test('Get 10 posts if no limit is specified', async () => {
       posts.getPostsList.mockResolvedValueOnce(dummyData)
 
+      const body = { userId: '1' }
+
       const res = await request(server)
         .get('/posts')
+        .send(body)
 
       expect(posts.getPostsList.mock.calls.length).toBe(1)
       expect(res.statusCode).toEqual(200)
@@ -42,10 +45,12 @@ describe('Posts', () => {
     test('Get 10 posts if limit is greater than 10', async () => {
       posts.getPostsList.mockResolvedValueOnce(dummyData)
 
+      const body = { userId: '1' }
       const queryParams = { limit: 20 }
       const res = await request(server)
         .get('/posts')
         .query(queryParams)
+        .send(body)
       
       expect(posts.getPostsList.mock.calls.length).toBe(1)
       expect(res.statusCode).toEqual(200)
@@ -59,9 +64,11 @@ describe('Posts', () => {
       posts.getPostsList.mockResolvedValueOnce([dummyData[0]])
 
       const queryParams = { limit: 1 }
+      const body = { userId: '1' }
       const res = await request(server)
         .get('/posts')
         .query(queryParams)
+        .send(body)
 
       expect(posts.getPostsList.mock.calls.length).toBe(1)
       expect(res.statusCode).toEqual(200)
@@ -74,10 +81,12 @@ describe('Posts', () => {
     test('Get 0 posts if limit is 0 or less OR offset is less than 0', async () => {
       posts.getPostsList.mockResolvedValueOnce([])
 
+      const body = { userId: '1' }
       const queryParams = { limit: 0, offset: -1 }
       const res = await request(server)
         .get('/posts')
         .query(queryParams)
+        .send(body)
 
       expect(posts.getPostsList.mock.calls.length).toBe(0)
       expect(res.statusCode).toEqual(400)
@@ -90,10 +99,12 @@ describe('Posts', () => {
     test('Get 0 posts if limit or offset are not a numbers', async () => {
       posts.getPostsList.mockResolvedValueOnce([])
 
+      const body = { userId: '1' }
       const queryParams = { limit: 'abc' }
       const res = await request(server)
         .get('/posts')
         .query(queryParams)
+        .send(body)
 
       expect(posts.getPostsList.mock.calls.length).toBe(0)
       expect(res.statusCode).toEqual(400)
@@ -106,7 +117,7 @@ describe('Posts', () => {
 
   describe('POST /posts', () => {
     test('Post a new post with a file attached', async () => {
-      fileManager.upload.mockResolvedValueOnce({ key: 'example.jpg' })
+      fileManager.upload.mockResolvedValueOnce({ name: 'example.jpg' })
       posts.insertPost.mockResolvedValueOnce()
 
       const res = await request(server)

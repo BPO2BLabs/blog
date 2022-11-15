@@ -9,6 +9,7 @@ module.exports = ({ posts }, { fileManager }) => {
         let { limit = 10, offset = 0 } = req.query
         const { userId } = req.body
 
+        if (!userId) { return res.status(400).json({ message: 'userId is required' }) }
         if (limit > 10) { limit = 10 }
         if (limit < 1 || offset < 0) {
           return res.status(400).json({
