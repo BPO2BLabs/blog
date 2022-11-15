@@ -2,7 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const fileUpload = require('express-fileupload')
 const app = express()
-const router = require('./router')
+const router = require('./components/index')
 
 module.exports = (database = {}, utils = {}) => {
   app.use(express.json())
