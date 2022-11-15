@@ -3,30 +3,45 @@ const { uuid } = require('uuidv4')
 const { s3Client } = require('../awsClient/index')
 
 function upload (document) {
+  console.log(document)
   const name = uuid()
-  try {
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Body: document.data,
-      Key: name
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Body: document.data,
+    Key: name,
+    Metadata: {
+      name: document.name,
+      type: document.mimetype
     }
-    s3Client.upload(params)
-    return name
-  } catch (err) {
-    throw new Error(err)
   }
+
+  return new Promise((resolve, reject) => {
+    try {
+      s3Client.upload(params, (err, data) => {
+        if (err) { reject(err) }
+        resolve(data.Key)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
-function download (name) {
-  try {
-    const params = {
-      Bucket: process.env.AWS_BUCKET_NAME,
-      Key: name
-    }
-    return s3Client.getObject(params)
-  } catch (err) {
-    throw new Error(err)
+async function download (name) {
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: name
   }
+  const metadata = await s3Client.headObject(params).promise()
+  const pipe = s3Client.getObject(params).createReadStream()
+
+  const response = {
+    name: metadata.Metadata.name,
+    type: metadata.Metadata.type,
+    pipe
+  }
+
+  return response
 }
 
 module.exports = {
