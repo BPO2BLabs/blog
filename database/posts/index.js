@@ -2,32 +2,35 @@ const { uuid, isUuid } = require('uuidv4')
 const conn = require('../connection')
 
 function getPostsList (userId, offset = 0, limit = 10) {
-  try {
-    const sql = `
-    SELECT post_id, content, create_date, file_name, file_url, user_id
-    FROM posts
-    WHERE user_id = ?
-    LIMIT ?, ?
-    ORDER BY create_date DESC
-    `
-    const params = [userId, offset, limit]
-    const [rows] = conn.query(sql, params)
-    return rows
-  } catch (err) {
-    throw new Error(err)
-  }
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT post_id, content, create_date, file_name, user_id
+      FROM posts
+      WHERE user_id = ?
+      LIMIT ?, ?
+      `
+      const params = [userId, offset, limit]
+      conn.execute(sql, params, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 function insertPost (post) {
   try {
-    const { userId, content, fileName, fileUrl } = post
+    const { userId, content, fileName } = post
     const createdAt = new Date(Date.now()).toISOString()
     const id = uuid()
     const sql = `
-    INSERT INTO posts (post_id, user_id, content, create_date, file_name, file_url)
-    VALUES (?, ?, ?, ?, ?, ?)
+    INSERT INTO posts (post_id, user_id, content, create_date, file_name)
+    VALUES (?, ?, ?, ?, ?)
     `
-    const params = [id, userId, content, createdAt, fileName, fileUrl]
+    const params = [id, userId, content, createdAt, fileName]
     conn.query(sql, params)
   } catch (err) {
     throw new Error(err)
@@ -36,18 +39,22 @@ function insertPost (post) {
 
 function getPost (postId) {
   if (!isUuid(postId)) { return null }
-  try {
-    const sql = `
-    SELECT post_id, content, create_date, file_name, file_url, user_id
-    FROM posts
-    WHERE post_id = ?
-    `
-    const params = [postId]
-    const [rows] = conn.query(sql, params)
-    return rows[0]
-  } catch (err) {
-    throw new Error(err)
-  }
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT post_id, content, create_date, file_name, user_id
+      FROM posts
+      WHERE post_id = ?
+      `
+      const params = [postId]
+      conn.query(sql, params, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows[0])
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 function deletePost (postId) {

@@ -1,3 +1,3 @@
-const fileUploader = require('./fileUploader/index')
+const fileManager = require('./fileManager/index')
 
-module.exports = { fileUploader }
+module.exports = { fileManager }

@@ -3,32 +3,35 @@ const conn = require('../connection')
 
 function getCommentsList (postId, offset, limit) {
   if (!isUuid(postId)) { return null }
-  try {
-    const sql = `
-    SELECT comment_id, content, create_date, user_id, file_name, file_url
-    FROM comments
-    WHERE post_id = ?
-    LIMIT ?, ?
-    ORDER BY create_date DESC
-    `
-    const params = [postId, offset, limit]
-    const [rows] = conn.query(sql, params)
-    return rows
-  } catch (err) {
-    throw new Error(err)
-  }
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT comment_id, content, create_date, user_id, file_name
+      FROM comments
+      WHERE post_id = ?
+      LIMIT ?, ?
+      `
+      const params = [postId, offset, limit]
+      conn.query(sql, params, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 function insertComment (comment) {
   try {
-    const { userId, postId, content, fileName, fileUrl } = comment
+    const { userId, postId, content, fileName } = comment
     const createdAt = new Date(Date.now()).toISOString()
     const id = uuid()
     const sql = `
-    INSERT INTO comments (comment_id, user_id, post_id, content, create_date, file_name, file_url)
+    INSERT INTO comments (comment_id, user_id, post_id, content, create_date, file_name)
     VALUES (?, ?, ?, ?, ?, ?, ?)
     `
-    const params = [id, userId, postId, content, createdAt, fileName, fileUrl]
+    const params = [id, userId, postId, content, createdAt, fileName]
     conn.query(sql, params)
   } catch (err) {
     throw new Error(err)
@@ -37,18 +40,22 @@ function insertComment (comment) {
 
 function getComment (commentId) {
   if (!isUuid(commentId)) { return null }
-  try {
-    const sql = `
-    SELECT comment_id, content, create_date, user_id, file_name, file_url
-    FROM comments
-    WHERE comment_id = ?
-    `
-    const params = [commentId]
-    const [rows] = conn.query(sql, params)
-    return rows[0]
-  } catch (err) {
-    throw new Error(err)
-  }
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT comment_id, content, create_date, user_id, file_name
+      FROM comments
+      WHERE comment_id = ?
+        `
+      const params = [commentId]
+      conn.query(sql, params, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows[0])
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
 }
 
 function deleteComment (commentId) {
