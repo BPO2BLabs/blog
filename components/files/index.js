@@ -5,9 +5,13 @@ module.exports = (_db, { fileManager }) => {
 
   router.get('/:documentId', async (req, res) => {
     const { documentId } = req.params
-    const { name, pipe } = await fileManager.download(documentId)
-    res.attachment(name)
-    pipe.pipe(res)
+    try {
+      const { name, pipe } = await fileManager.download(documentId)
+      res.attachment(name)
+      pipe.pipe(res)
+    } catch (err) {
+      res.status(404).send('File not found')
+    }
   })
 
   return router

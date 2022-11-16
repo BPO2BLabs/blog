@@ -3,7 +3,6 @@ const { uuid } = require('uuidv4')
 const { s3Client } = require('../awsClient/index')
 
 function upload (document) {
-  console.log(document)
   const name = uuid()
   const params = {
     Bucket: process.env.AWS_BUCKET_NAME,
