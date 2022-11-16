@@ -132,17 +132,17 @@ There are three endpoints
 
 #### GET (/):{ message, []posts }
 
-** QUERY PARAMS **
+**QUERY PARAMS**
 - limit (default: 10): A **number** that describes how many posts retrieve. MAX 10, MIN 1
 
 - offset (default: 0): A **number** that describes how many posts skip before retrieve. MIN 0
 
-** BODY PARAMS **
+**BODY PARAMS**
 - userId (required): A valid userId associated with posts.
 
 #### POST (/):{ message, postId }
 
-** BODY PARAMS **
+**BODY PARAMS**
 - userId (required): A valid userId to associate the post.
 
 - content (required): Text to save in the post. MAX 255 Characteres.
@@ -151,13 +151,13 @@ There are three endpoints
 
 #### GET(/:postId):{ message, {}post }
 
-** PARAMS **
+**PARAMS**
 - postId(required): A valid postId value.
 
 
 #### DELETE(/:postId):{ message }
 
-** PARAMS **
+**PARAMS**
 - postId(required): A valid postId value.
 
 
@@ -165,17 +165,17 @@ There are three endpoints
 
 #### GET (/):{ message, []comments }
 
-** QUERY PARAMS **
+**QUERY PARAMS**
 - limit (default: 10): A **number** that describes how many comments retrieve. MAX 10, MIN 1
 
 - offset (default: 0): A **number** that describes how many comments skip before retrieve. MIN 0
 
-** BODY PARAMS **
+**BODY PARAMS**
 - postId (required): A valid postId associated with posts.
 
 #### POST (/):{ message, commentId }
 
-** BODY PARAMS **
+**BODY PARAMS**
 - userId (required): A valid userId to associate the comment.
 
 - postId (required): A valid postId to associate the comment.
@@ -186,18 +186,18 @@ There are three endpoints
 
 #### GET(/:commentId):{ message, {}comment }
 
-** PARAMS **
+**PARAMS**
 - commentId(required): A valid commentId value.
 
 
 #### DELETE(/:commentId):{ message }
 
-** PARAMS **
+**PARAMS**
 - commentId(required): A valid commentId value.
 
 ### /files
 
 #### GET(/:fileId): file
 
-** PARAMS **
+**PARAMS**
 - fileId(required): A valid fileId value.
