@@ -55,10 +55,11 @@ module.exports = ({ posts }, { fileManager }) => {
           fileName
         }
 
-        await posts.insertPost(post)
+        const postId = await posts.insertPost(post)
 
         return res.status(201).json({
-          message: 'Post created successfully'
+          message: 'Post created successfully',
+          postId
         })
       } catch (err) {
         res.status(500).json({

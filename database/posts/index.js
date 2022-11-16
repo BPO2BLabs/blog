@@ -32,6 +32,7 @@ function insertPost (post) {
     `
     const params = [id, userId, content, createdAt, fileName]
     conn.query(sql, params)
+    return id
   } catch (err) {
     throw new Error(err)
   }

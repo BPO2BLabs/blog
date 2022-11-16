@@ -14,13 +14,13 @@ module.exports = ({ comments }, { fileManager }) => {
         if (limit < 1 || offset < 0) {
           return res.status(400).json({
             message: 'Limit or offset are too low',
-            posts: []
+            comments: []
           })
         }
         if (isNaN(limit) || isNaN(offset)) {
           return res.status(400).json({
             message: 'Limit and offset must be numbers',
-            posts: []
+            comments: []
           })
         }
 
@@ -57,10 +57,11 @@ module.exports = ({ comments }, { fileManager }) => {
           postId
         }
 
-        await comments.insertComment(comment)
+        const commentId = await comments.insertComment(comment)
 
         return res.status(201).json({
-          message: 'Comment created successfully'
+          message: 'Comment created successfully',
+          commentId
         })
       } catch (err) {
         res.status(500).json({

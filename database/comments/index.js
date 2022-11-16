@@ -33,6 +33,7 @@ function insertComment (comment) {
     `
     const params = [id, userId, postId, content, createdAt, fileName]
     conn.query(sql, params)
+    return id
   } catch (err) {
     throw new Error(err)
   }
