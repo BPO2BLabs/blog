@@ -1,28 +1,14 @@
 const express = require('express')
+const { validatePaginationQueries, validateUserId, validateContent, validatePostId } = require('../../utils/validationForComponents/index')
 
 module.exports = ({ comments }, { fileManager }) => {
   const router = express.Router()
 
   router.route('/')
-    .get(async (req, res) => {
+    .get(validatePostId, validatePaginationQueries, async (req, res) => {
       try {
-        let { limit = 10, offset = 0 } = req.query
+        const { limit = 10, offset = 0 } = req.query
         const { postId } = req.body
-
-        if (!postId) { return res.status(400).json({ message: 'PostId is required' }) }
-        if (limit > 10) { limit = 10 }
-        if (limit < 1 || offset < 0) {
-          return res.status(400).json({
-            message: 'Limit or offset are too low',
-            comments: []
-          })
-        }
-        if (isNaN(limit) || isNaN(offset)) {
-          return res.status(400).json({
-            message: 'Limit and offset must be numbers',
-            comments: []
-          })
-        }
 
         const commentsList = await comments.getCommentsList(postId, offset, limit)
 
@@ -36,7 +22,7 @@ module.exports = ({ comments }, { fileManager }) => {
         })
       }
     })
-    .post(async (req, res) => {
+    .post(validatePostId, validateUserId, validateContent, async (req, res) => {
       try {
         const { userId, content, postId } = req.body
         let fileName = ''
@@ -45,10 +31,6 @@ module.exports = ({ comments }, { fileManager }) => {
           const key = await fileManager.upload(attachment)
           fileName = key
         }
-
-        if (!userId) { return res.status(400).json({ message: 'User ID is required' }) }
-        if (!content) { return res.status(400).json({ message: 'Content is required' }) }
-        if (!postId) { return res.status(400).json({ message: 'Post ID is required' }) }
 
         const comment = {
           userId,

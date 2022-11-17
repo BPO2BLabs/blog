@@ -9,6 +9,7 @@ function getCommentsList (postId, offset, limit) {
       SELECT comment_id, content, create_date, user_id, file_name
       FROM comments
       WHERE post_id = ?
+      ORDER BY create_date DESC
       LIMIT ?, ?
       `
       const params = [postId, offset, limit]

@@ -1,28 +1,14 @@
 const express = require('express')
+const { validatePaginationQueries, validateUserId, validateContent } = require('../../utils/validationForComponents/index')
 
 module.exports = ({ posts }, { fileManager }) => {
   const router = express.Router()
 
   router.route('/')
-    .get(async (req, res) => {
+    .get(validatePaginationQueries, validateUserId, async (req, res) => {
       try {
-        let { limit = 10, offset = 0 } = req.query
+        const { limit = 10, offset = 0 } = req.query
         const { userId } = req.body
-
-        if (!userId) { return res.status(400).json({ message: 'userId is required' }) }
-        if (limit > 10) { limit = 10 }
-        if (limit < 1 || offset < 0) {
-          return res.status(400).json({
-            message: 'Limit or offset are too low',
-            posts: []
-          })
-        }
-        if (isNaN(limit) || isNaN(offset)) {
-          return res.status(400).json({
-            message: 'Limit and offset must be numbers',
-            posts: []
-          })
-        }
 
         const postsList = await posts.getPostsList(userId, offset, limit)
 
@@ -36,7 +22,7 @@ module.exports = ({ posts }, { fileManager }) => {
         })
       }
     })
-    .post(async (req, res) => {
+    .post(validateUserId, validateContent, async (req, res) => {
       try {
         const { userId, content } = req.body
         let fileName = ''
@@ -45,9 +31,6 @@ module.exports = ({ posts }, { fileManager }) => {
           const key = await fileManager.upload(attachment)
           fileName = key
         }
-
-        if (!userId) { return res.status(400).json({ message: 'User ID is required' }) }
-        if (!content) { return res.status(400).json({ message: 'Content is required' }) }
 
         const post = {
           userId,
@@ -60,6 +43,43 @@ module.exports = ({ posts }, { fileManager }) => {
         return res.status(201).json({
           message: 'Post created successfully',
           postId
+        })
+      } catch (err) {
+        res.status(500).json({
+          message: err.message
+        })
+      }
+    })
+
+  router.route('/recents')
+    .get(validatePaginationQueries, async (req, res) => {
+      try {
+        const { limit = 10, offset = 0 } = req.query
+
+        const postsList = await posts.getRecentPostsList(offset, limit)
+
+        return res.status(200).json({
+          message: 'Recent posts retrieved successfully',
+          posts: postsList
+        })
+      } catch (err) {
+        res.status(500).json({
+          message: err.message
+        })
+      }
+    })
+
+  router.route('/replied')
+    .get(validatePaginationQueries, validateUserId, async (req, res) => {
+      try {
+        const { limit = 10, offset = 0 } = req.query
+        const { userId } = req.body
+
+        const postsList = await posts.getRecentRepliedPostsList(userId, offset, limit)
+
+        return res.status(200).json({
+          message: 'Posts retrieved successfully',
+          posts: postsList
         })
       } catch (err) {
         res.status(500).json({

@@ -107,7 +107,7 @@ This is the structure for the database in this project:
 | post_id     | varchar(64)  | PRIMARY KEY.        |
 | user_id     | varchar(64)  | NOT NULL.           |
 | content     | varchar(255) | NOT NULL.           |
-| create_date | varchar(255) | NOT NULL.           |
+| create_date | datetime     | NOT NULL.           |
 | file_name   | varchar(255) | NULL.               |
 
 
@@ -120,7 +120,7 @@ This is the structure for the database in this project:
 | post_id     | varchar(64)  | FOREIGN KEY. |
 | user_id     | varchar(64)  | NOT NULL.    |
 | content     | varchar(255) | NOT NULL.    |
-| create_date | varchar(255) | NOT NULL.    |
+| create_date | datetime     | NOT NULL.    |
 | file_name   | varchar(255) | NULL.        |
 
 ---
