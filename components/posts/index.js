@@ -5,15 +5,14 @@ module.exports = ({ posts }, { fileManager }) => {
   const router = express.Router()
 
   router.route('/')
-    .get(validatePaginationQueries, validateUserId, async (req, res) => {
+    .get(validatePaginationQueries, async (req, res) => {
       try {
         const { limit = 10, offset = 0 } = req.query
-        const { userId } = req.body
 
-        const postsList = await posts.getPostsList(userId, offset, limit)
+        const postsList = await posts.getRecentPostsList(offset, limit)
 
         return res.status(200).json({
-          message: 'Posts retrieved successfully',
+          message: 'Recent posts retrieved successfully',
           posts: postsList
         })
       } catch (err) {
@@ -51,15 +50,16 @@ module.exports = ({ posts }, { fileManager }) => {
       }
     })
 
-  router.route('/recents')
-    .get(validatePaginationQueries, async (req, res) => {
+  router.route('/user')
+    .get(validatePaginationQueries, validateUserId, async (req, res) => {
       try {
         const { limit = 10, offset = 0 } = req.query
+        const { userId } = req.body
 
-        const postsList = await posts.getRecentPostsList(offset, limit)
+        const postsList = await posts.getPostsList(userId, offset, limit)
 
         return res.status(200).json({
-          message: 'Recent posts retrieved successfully',
+          message: 'Posts retrieved successfully',
           posts: postsList
         })
       } catch (err) {
