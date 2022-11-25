@@ -1,7 +1,7 @@
 const { isUuid } = require('uuidv4')
 
 function validatePaginationQueries (req, res, next) {
-  const { limit = 10, offset = 0 } = req.query
+  let { limit = 10, offset = 0 } = req.query
 
   if (limit < 1 || offset < 0) {
     return res.status(400).json({
@@ -9,13 +9,17 @@ function validatePaginationQueries (req, res, next) {
       posts: []
     })
   }
+
   if (isNaN(limit) || isNaN(offset)) {
     return res.status(400).json({
       message: 'Limit and offset must be numbers',
       posts: []
     })
   }
-  if (limit > 10) { req.query.limit = 10 }
+  if (limit > 10) { limit = 10 }
+
+  req.query.offset = offset.toString()
+  req.query.limit = limit.toString()
   next()
 }
 
