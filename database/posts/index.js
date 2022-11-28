@@ -69,11 +69,12 @@ function insertPost (post) {
   try {
     const { userId, content, fileName } = post
     const id = uuid()
+    const currentDate = new Date(Date.now()).toIsoString()
     const sql = `
-    INSERT INTO posts (post_id, user_id, content, file_name)
-    VALUES (?, ?, ?, ?)
+    INSERT INTO posts (post_id, user_id, content, file_name, create_date)
+    VALUES (?, ?, ?, ?, ?)
     `
-    const params = [id, userId, content, fileName]
+    const params = [id, userId, content, fileName, currentDate]
     conn.query(sql, params)
     return id
   } catch (err) {
