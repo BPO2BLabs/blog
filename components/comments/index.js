@@ -7,7 +7,9 @@ module.exports = ({ comments }, { fileManager }) => {
   router.route('/')
     .get(validatePostId, validatePaginationQueries, async (req, res) => {
       try {
-        const { limit = 10, offset = 0 } = req.query
+        let { limit = 10, offset = 0 } = req.query
+        limit = parseInt(limit)
+        offset = parseInt(offset)
         const { postId } = req.body
 
         const commentsList = await comments.getCommentsList(postId, offset, limit)
