@@ -7,7 +7,9 @@ module.exports = ({ posts }, { fileManager }) => {
   router.route('/')
     .get(validatePaginationQueries, async (req, res) => {
       try {
-        const { limit = 10, offset = 0 } = req.query
+        let { limit = 10, offset = 0 } = req.query
+        limit = limit.toString()
+        offset = offset.toString()
 
         const postsList = await posts.getRecentPostsList(offset, limit)
 

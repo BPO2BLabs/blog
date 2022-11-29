@@ -18,8 +18,6 @@ function validatePaginationQueries (req, res, next) {
   }
   if (limit > 10) { limit = 10 }
 
- // req.query.offset = offset.toString()
- // req.query.limit = limit.toString()
   next()
 }
 
