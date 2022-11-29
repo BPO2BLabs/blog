@@ -6,7 +6,7 @@ const router = require('./components/index')
 
 module.exports = (database = {}, utils = {}) => {
   app.use(express.json())
-  app.use(express.urlencoded())
+  app.use(express.urlencoded({ extended: true }))
   app.use(fileUpload())
   app.use(cors({ origin: '*' }))
   router(app, database, utils)
