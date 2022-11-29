@@ -1,7 +1,7 @@
 const { uuid, isUuid } = require('uuidv4')
 const conn = require('../connection')
 
-function getCommentsList (postId, offset, limit) {
+function getCommentsList (postId, offset = 0, limit = 10) {
   if (!isUuid(postId)) { return null }
   return new Promise((resolve, reject) => {
     try {
