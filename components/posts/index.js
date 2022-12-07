@@ -70,7 +70,7 @@ module.exports = ({ posts }, { fileManager }) => {
     })
 
   router.route('/replied')
-    .get(validatePaginationQueries, validateUserId, async (req, res) => {
+    .post(validatePaginationQueries, validateUserId, async (req, res) => {
       try {
         const { limit = 10, offset = 0 } = req.query
         const { userId } = req.body

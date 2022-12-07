@@ -5,25 +5,6 @@ module.exports = ({ comments }, { fileManager }) => {
   const router = express.Router()
 
   router.route('/')
-    .get(validatePostId, validatePaginationQueries, async (req, res) => {
-      try {
-        let { limit = 10, offset = 0 } = req.query
-        limit = parseInt(limit)
-        offset = parseInt(offset)
-        const { postId } = req.body
-
-        const commentsList = await comments.getCommentsList(postId, offset, limit)
-
-        return res.status(200).json({
-          message: 'Comments retrieved successfully',
-          comments: commentsList
-        })
-      } catch (err) {
-        res.status(500).json({
-          message: err.message
-        })
-      }
-    })
     .post(validatePostId, validateUserId, validateContent, async (req, res) => {
       try {
         const { userId, content, postId } = req.body
@@ -54,7 +35,28 @@ module.exports = ({ comments }, { fileManager }) => {
       }
     })
 
-  router.route('/:commentId')
+  router.route('/list')
+    .post(validatePostId, validatePaginationQueries, async (req, res) => {
+      try {
+        let { limit = 10, offset = 0 } = req.query
+        limit = parseInt(limit)
+        offset = parseInt(offset)
+        const { postId } = req.body
+
+        const commentsList = await comments.getCommentsList(postId, offset, limit)
+
+        return res.status(200).json({
+          message: 'Comments retrieved successfully',
+          comments: commentsList
+        })
+      } catch (err) {
+        res.status(500).json({
+          message: err.message
+        })
+      }
+    })
+
+  router.route('/comment/:commentId')
     .get(async (req, res) => {
       try {
         const { commentId } = req.params
