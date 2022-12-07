@@ -149,6 +149,26 @@ There are three endpoints
 
 - attachment (file, optional): File to associate with the post.
 
+#### POST (/user):{ message, []posts }
+
+**QUERY PARAMS**
+- limit (default: 10): A **number** that describes how many posts retrieve. MAX 10, MIN 1
+
+- offset (default: 0): A **number** that describes how many posts skip before retrieve. MIN 0
+
+**BODY PARAMS**
+- userId (required): A valid userId to associate the post.
+
+#### POST (/replied):{ message, []posts }
+
+**QUERY PARAMS**
+- limit (default: 10): A **number** that describes how many posts retrieve. MAX 10, MIN 1
+
+- offset (default: 0): A **number** that describes how many posts skip before retrieve. MIN 0
+
+**BODY PARAMS**
+- userId (required): A valid userId to associate the post.
+
 #### GET(/:postId):{ message, {}post }
 
 **PARAMS**
@@ -163,16 +183,6 @@ There are three endpoints
 
 ### /comments
 
-#### GET (/):{ message, []comments }
-
-**QUERY PARAMS**
-- limit (default: 10): A **number** that describes how many comments retrieve. MAX 10, MIN 1
-
-- offset (default: 0): A **number** that describes how many comments skip before retrieve. MIN 0
-
-**BODY PARAMS**
-- postId (required): A valid postId associated with posts.
-
 #### POST (/):{ message, commentId }
 
 **BODY PARAMS**
@@ -184,13 +194,24 @@ There are three endpoints
 
 - attachment (file, optional): File to associate with the comment.
 
-#### GET(/:commentId):{ message, {}comment }
+#### POST (/list):{ message, []comments }
+
+**QUERY PARAMS**
+- limit (default: 10): A **number** that describes how many comments retrieve. MAX 10, MIN 1
+
+- offset (default: 0): A **number** that describes how many comments skip before retrieve. MIN 0
+
+**BODY PARAMS**
+- postId (required): A valid postId associated with posts.
+
+
+#### GET(/comment/:commentId):{ message, {}comment }
 
 **PARAMS**
 - commentId(required): A valid commentId value.
 
 
-#### DELETE(/:commentId):{ message }
+#### DELETE(/comment/:commentId):{ message }
 
 **PARAMS**
 - commentId(required): A valid commentId value.
