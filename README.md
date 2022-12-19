@@ -123,10 +123,17 @@ This is the structure for the database in this project:
 | create_date | datetime     | NOT NULL.    |
 | file_name   | varchar(255) | NULL.        |
 
+### Users
+
+| NAME     | TYPE         | DESCRIPTION  |
+|:--------:|:------------:|:------------:|
+| username | varchar(64)  | PRIMARY KEY. |
+| password | varchar(64)  | NOT NULL.    |
+
 ---
 ## Endpoints 
 
-There are three endpoints
+There are five endpoints
 
 ### /posts
 
@@ -222,3 +229,29 @@ There are three endpoints
 
 **PARAMS**
 - fileId(required): A valid fileId value.
+
+### /auth
+
+#### POST(/): token
+
+**BODY PARAMS**
+- username (required): A valid username
+- password (required): A valid password
+
+### /consult
+
+#### POST(/posts):{ []posts }
+
+**HEADERS**
+- token (required): A valid token to validate the request
+
+**QUERY PARAMS**
+- limit (default: 100): A **number** that describes how many posts retieve. NO MAX, MIN 1
+
+#### POST(/comments):{ []posts }
+
+**HEADERS**
+- token (required): A valid token to validate the request
+
+**QUERY PARAMS**
+- limit (default: 100): A **number** that describes how many posts retieve. NO MAX, MIN 1
