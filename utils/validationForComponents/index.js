@@ -1,4 +1,5 @@
 const { isUuid } = require('uuidv4')
+const { verifyToken } = require('../secureConsult/index')
 
 function validatePaginationQueries (req, res, next) {
   let { limit = 10, offset = 0 } = req.query
@@ -43,9 +44,22 @@ function validatePostId (req, res, next) {
   next()
 }
 
+function validateToken (req, res, next) {
+  const { token } = req.headers
+  if (!token) { return res.status(401).json({ message: 'Token is required' }) }
+  try {
+    const decoded = verifyToken(token)
+    req.user = decoded.user
+    next()
+  } catch (error) {
+    return res.status(401).json({ message: 'Invalid token' })
+  }
+}
+
 module.exports = {
   validatePaginationQueries,
   validateUserId,
   validateContent,
-  validatePostId
+  validatePostId,
+  validateToken
 }
