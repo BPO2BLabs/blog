@@ -43,7 +43,23 @@ async function download (name) {
   return response
 }
 
+async function uploadFiles (files) {
+  const filesArray = []
+
+  if (files && files.attachment && files.attachment.length > 0) {
+    const { attachment } = files
+    const result = await Promise.all(attachment.map((singleFile) => upload(singleFile)))
+    filesArray.push(...result)
+  } else if (files && files.attachment) {
+    const result = await upload(files.attachment)
+    filesArray.push(result)
+  }
+
+  return filesArray
+}
+
 module.exports = {
   upload,
-  download
+  download,
+  uploadFiles
 }

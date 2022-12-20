@@ -11,12 +11,7 @@ module.exports = ({ comments }, { fileManager, validationComponent }) => {
       async (req, res) => {
         try {
           const { userId, content, postId } = req.body
-          const files = []
-          if (req.files && req.files.attachment && req.files.attachment.length > 0) {
-            const { attachment } = req.files
-            const result = await Promise.all(attachment.map((file) => fileManager.upload(file)))
-            files.push(...result)
-          }
+          const files = await fileManager.uploadFiles(req.files)
 
           const comment = {
             userId,
