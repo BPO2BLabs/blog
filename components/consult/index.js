@@ -9,9 +9,10 @@ module.exports = ({ posts }, { validationComponent }) => {
       async (req, res) => {
         try {
           const { limit = '100' } = req.query
+          const { companyID } = req.body
           if (limit < 1) { return res.status(400).json({ message: 'Limit must be greater than 0' }) }
 
-          const postsList = await posts.getRecentPostsList('0', limit)
+          const postsList = await posts.getRecentPostsList('0', limit, companyID)
           res.status(200).json({ posts: postsList })
         } catch (err) {
           res.status(500).json({ error: err.message })
@@ -25,9 +26,10 @@ module.exports = ({ posts }, { validationComponent }) => {
       async (req, res) => {
         try {
           const { limit = 100 } = req.query
+          const { userID } = req.body
           if (limit < 1) { return res.status(400).json({ message: 'Limit must be greater than 0' }) }
 
-          const commentsList = await posts.getRecentRepliedPostsList(0, limit)
+          const commentsList = await posts.getRecentRepliedPostsList(userID, 0, limit)
           res.status(200).json({ comments: commentsList })
         } catch (err) {
           res.status(500).json({ error: err.message })
