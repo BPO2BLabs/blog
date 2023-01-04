@@ -9,8 +9,9 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
       async (req, res) => {
         try {
           const { limit = 10, offset = 0 } = req.query
+          const { companyID } = req.body
 
-          const postsList = await posts.getRecentPostsList(offset, limit)
+          const postsList = await posts.getRecentPostsList(offset, limit, companyID)
 
           return res.status(200).json({
             message: 'Recent posts retrieved successfully',
@@ -27,13 +28,15 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
       validationComponent.validateContent,
       async (req, res) => {
         try {
-          const { userId, content } = req.body
+          const { userId, userName, companyID, content } = req.body
           const files = await fileManager.uploadFiles(req.files)
 
           const post = {
             userId,
             content,
-            fileName: JSON.stringify({ files })
+            fileName: JSON.stringify({ files }),
+            userName,
+            companyID
           }
 
           const postId = await posts.insertPost(post)

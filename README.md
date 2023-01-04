@@ -145,7 +145,7 @@ There are five endpoints
 - offset (default: 0): A **number** that describes how many posts skip before retrieve. MIN 0
 
 **BODY PARAMS**
-- userId (required): A valid userId associated with posts.
+- companyID (required): A valid companyID associated with posts.
 
 #### POST (/):{ message, postId }
 
@@ -155,6 +155,10 @@ There are five endpoints
 - content (required): Text to save in the post. MAX 255 Characteres.
 
 - attachment (file, optional): File to associate with the post.
+
+- userName (required): A valid username to save in the post.
+
+- companyID (required): A valid companyID to save in the post.
 
 #### POST (/user):{ message, []posts }
 

@@ -5,7 +5,7 @@ function getPostsList (userId, offset = 0, limit = 10) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT post_id, content, create_date, file_name, user_id
+      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
       FROM posts
       WHERE user_id = ?
       ORDER BY create_date DESC
@@ -22,16 +22,17 @@ function getPostsList (userId, offset = 0, limit = 10) {
   })
 }
 
-function getRecentPostsList (offset = 0, limit = 10) {
+function getRecentPostsList (offset = 0, limit = 10, companyID) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT post_id, content, create_date, file_name, user_id
+      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
       FROM posts
+      WHERE company_id = ?
       ORDER BY create_date DESC
       LIMIT ?, ?
       `
-      const params = [offset, limit]
+      const params = [companyID, offset, limit]
       conn.execute(sql, params, (err, rows) => {
         if (err) { reject(err) }
         resolve(rows)
@@ -67,14 +68,14 @@ function getRecentRepliedPostsList (userId, offset, limit) {
 
 function insertPost (post) {
   try {
-    const { userId, content, fileName } = post
+    const { userId, content, fileName, userName, companyID } = post
     const id = uuid()
     const currentDate = new Date(Date.now()).toISOString()
     const sql = `
-    INSERT INTO posts (post_id, user_id, content, file_name, create_date)
-    VALUES (?, ?, ?, ?, ?)
+    INSERT INTO posts (post_id, user_id, content, file_name, create_date, user_name, company_id)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
     `
-    const params = [id, userId, content, fileName, currentDate]
+    const params = [id, userId, content, fileName, currentDate, userName, companyID]
     conn.query(sql, params)
     return id
   } catch (err) {
@@ -87,7 +88,7 @@ function getPost (postId) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT post_id, content, create_date, file_name, user_id
+      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
       FROM posts
       WHERE post_id = ?
       `
