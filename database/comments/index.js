@@ -6,7 +6,7 @@ function getCommentsList (postId, offset = 0, limit = 10) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT comment_id, content, create_date, user_id, file_name, user_name
+      SELECT comment_id, content, create_date, user_id, file_name, user_name, company_id
       FROM comments
       WHERE post_id = ?
       ORDER BY create_date DESC
@@ -25,14 +25,14 @@ function getCommentsList (postId, offset = 0, limit = 10) {
 
 function insertComment (comment) {
   try {
-    const { userId, postId, content, fileName, userName } = comment
+    const { userId, postId, content, fileName, userName, companyID } = comment
     const createdAt = new Date(Date.now()).toISOString()
     const id = uuid()
     const sql = `
-    INSERT INTO comments (comment_id, user_id, post_id, content, create_date, file_name, user_name)
+    INSERT INTO comments (comment_id, user_id, post_id, content, create_date, file_name, user_name, company_id)
     VALUES (?, ?, ?, ?, ?, ?, ?)
     `
-    const params = [id, userId, postId, content, createdAt, fileName, userName]
+    const params = [id, userId, postId, content, createdAt, fileName, userName, companyID]
     conn.query(sql, params)
     return id
   } catch (err) {
@@ -45,7 +45,7 @@ function getComment (commentId) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT comment_id, content, create_date, user_id, file_name, user_name
+      SELECT comment_id, content, create_date, user_id, file_name, user_name, company_id
       FROM comments
       WHERE comment_id = ?
         `

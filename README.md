@@ -205,6 +205,10 @@ There are five endpoints
 
 - attachment (file, optional): File to associate with the comment.
 
+- userName (required): A valid username to save with the comment.
+
+- companyID (required): A valid companyID to save with the comment.
+
 #### POST (/list):{ message, []comments }
 
 **QUERY PARAMS**
