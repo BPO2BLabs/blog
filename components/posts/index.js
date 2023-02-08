@@ -9,7 +9,7 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
       async (req, res) => {
         try {
           const { limit = 10, offset = 0 } = req.query
-          const { companyID } = req.headers['Company-ID']
+          const { companyID } = req.headers['company-id']
 
           const postsList = await posts.getRecentPostsList(offset, limit, companyID)
 
