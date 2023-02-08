@@ -10,7 +10,8 @@ module.exports = ({ comments }, { fileManager, validationComponent }) => {
       validationComponent.validateContent,
       async (req, res) => {
         try {
-          const { userId, content, postId, userName, companyID } = req.body
+          const companyID = req.headers['company-id']
+          const { userId, content, postId, userName } = req.body
           const files = await fileManager.uploadFiles(req.files)
 
           const comment = {

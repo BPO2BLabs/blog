@@ -28,7 +28,8 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
       validationComponent.validateContent,
       async (req, res) => {
         try {
-          const { userId, userName, companyID, content } = req.body
+          const companyID = req.headers['company-id']
+          const { userId, userName, content } = req.body
           const files = await fileManager.uploadFiles(req.files)
 
           const post = {
