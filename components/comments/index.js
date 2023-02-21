@@ -47,10 +47,14 @@ module.exports = ({ comments }, { fileManager, validationComponent }) => {
           offset = parseInt(offset)
           const { postId } = req.body
 
-          const commentsList = await comments.getCommentsList(postId, offset, limit)
+          const [commentsList, countRows] = await Promise.all([
+            comments.getCommentsList(postId, offset, limit),
+            comments.getCountAllCommentsByPost(postId)
+          ])
 
           return res.status(200).json({
             message: 'Comments retrieved successfully',
+            count: countRows,
             comments: commentsList
           })
         } catch (err) {

@@ -1,6 +1,26 @@
 const { uuid, isUuid } = require('uuidv4')
 const conn = require('../connection')
 
+function getCountAllCommentsByPost (postID) {
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT COUNT(*) AS rowsCount
+      FROM comments
+      WHERE post_id = ?
+      `
+      const params = [postID]
+
+      conn.execute(sql, params, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows[0].rowsCount)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
 function getCommentsList (postId, offset = 0, limit = 10) {
   if (!isUuid(postId)) { return null }
   return new Promise((resolve, reject) => {
@@ -78,5 +98,6 @@ module.exports = {
   getCommentsList,
   insertComment,
   getComment,
-  deleteComment
+  deleteComment,
+  getCountAllCommentsByPost
 }
