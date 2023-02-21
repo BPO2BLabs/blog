@@ -39,6 +39,7 @@ module.exports = ({ posts }) => {
         }
       }
     )
+  return router
 }
 
 // Post comments totales
