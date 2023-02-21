@@ -11,10 +11,14 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
           const { limit = 10, offset = 0 } = req.query
           const companyID = req.headers['company-id']
 
-          const postsList = await posts.getRecentPostsList(offset, limit, companyID)
+          const [postsList, countRows] = await Promise.all([
+            posts.getRecentPostsList(offset, limit, companyID),
+            posts.getCountAllPostByCompany(companyID)
+          ])
 
           return res.status(200).json({
             message: 'Recent posts retrieved successfully',
+            count: countRows,
             posts: postsList
           })
         } catch (err) {
@@ -60,12 +64,17 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
       async (req, res) => {
         try {
           const { limit = 10, offset = 0 } = req.query
+          const companyID = req.headers['company-id']
           const { userId } = req.body
 
-          const postsList = await posts.getPostsList(userId, offset, limit)
+          const [postsList, countRows] = await Promise.all([
+            posts.getPostsList(userId, offset, limit),
+            posts.getCountAllPostByCompany(companyID)
+          ])
 
           return res.status(200).json({
             message: 'Posts retrieved successfully',
+            count: countRows,
             posts: postsList
           })
         } catch (err) {
@@ -82,12 +91,17 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
       async (req, res) => {
         try {
           const { limit = 10, offset = 0 } = req.query
+          const companyID = req.headers['company-id']
           const { userId } = req.body
 
-          const postsList = await posts.getRecentRepliedPostsList(userId, offset, limit)
+          const [postsList, countRows] = await Promise.all([
+            posts.getRecentRepliedPostsList(userId, offset, limit),
+            posts.getCountAllPostByCompany(companyID)
+          ])
 
           return res.status(200).json({
             message: 'Posts retrieved successfully',
+            count: countRows,
             posts: postsList
           })
         } catch (err) {

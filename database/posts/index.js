@@ -1,6 +1,63 @@
 const { uuid, isUuid } = require('uuidv4')
 const conn = require('../connection')
 
+function getCountAllPosts () {
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT COUNT(*) AS rowsCount
+      FROM posts
+      `
+      conn.execute(sql, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows[0].rowsCount)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+function getCountAllPostByCompany (companyID) {
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT COUNT(*) AS rowsCount
+      FROM posts
+      WHERE company_id = ?
+      `
+      const params = [companyID]
+
+      conn.execute(sql, params, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows[0].rowsCount)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+function getAllPostsList (offset = 0, limit = 10) {
+  return new Promise((resolve, reject) => {
+    try {
+      const sql = `
+      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
+      FROM posts
+      ORDER BY create_date DESC
+      LIMIT ?, ?
+      `
+      const params = [offset, limit]
+      conn.execute(sql, params, (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
 function getPostsList (userId, offset = 0, limit = 10) {
   return new Promise((resolve, reject) => {
     try {
@@ -123,5 +180,8 @@ module.exports = {
   getPost,
   getRecentPostsList,
   getRecentRepliedPostsList,
-  deletePost
+  deletePost,
+  getAllPostsList,
+  getCountAllPostByCompany,
+  getCountAllPosts
 }
