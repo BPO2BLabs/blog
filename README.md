@@ -99,18 +99,18 @@ There is a list of all enviroment variables used in this project and their descr
 This is the structure for the database in this project:
 
 
-
 ### Posts
 
-| NAME        | TYPE         | DESCRIPTION  |
-|:-----------:|:------------:|:------------:|
-| post_id     | varchar(64)  | PRIMARY KEY. |
-| user_id     | varchar(64)  | NOT NULL.    |
-| company_id  | varchar(64)  | NOT NULL.    |
-| user_name   | varchar(64)  | NOT NULL.    |
-| content     | varchar(255) | NOT NULL.    |
-| create_date | datetime     | NOT NULL.    |
-| file_name   | varchar(255) | NULL.        |
+| NAME           | TYPE         | DESCRIPTION  |
+|:--------------:|:------------:|:------------:|
+| post_id        | varchar(64)  | PRIMARY KEY. |
+| user_id        | varchar(64)  | NOT NULL.    |
+| company_id     | varchar(64)  | NOT NULL.    |
+| comments_count | int(11)      | NOT NULL.    |
+| user_name      | varchar(64)  | NOT NULL.    |
+| content        | varchar(255) | NOT NULL.    |
+| create_date    | datetime     | NOT NULL.    |
+| file_name      | varchar(255) | NULL.        |
 
 
 
@@ -267,3 +267,6 @@ There are five endpoints
 
 **QUERY PARAMS**
 - limit (default: 100): A **number** that describes how many posts retieve. NO MAX, MIN 1
+
+## NOTE
+There is two triggers to control when a new comment is added o deleted for update the posts.comments_count
