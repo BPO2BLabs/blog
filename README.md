@@ -102,13 +102,15 @@ This is the structure for the database in this project:
 
 ### Posts
 
-| NAME        | TYPE         | DESCRIPTION         |
-|:-----------:|:------------:|:-------------------:|
-| post_id     | varchar(64)  | PRIMARY KEY.        |
-| user_id     | varchar(64)  | NOT NULL.           |
-| content     | varchar(255) | NOT NULL.           |
-| create_date | datetime     | NOT NULL.           |
-| file_name   | varchar(255) | NULL.               |
+| NAME        | TYPE         | DESCRIPTION  |
+|:-----------:|:------------:|:------------:|
+| post_id     | varchar(64)  | PRIMARY KEY. |
+| user_id     | varchar(64)  | NOT NULL.    |
+| company_id  | varchar(64)  | NOT NULL.    |
+| user_name   | varchar(64)  | NOT NULL.    |
+| content     | varchar(255) | NOT NULL.    |
+| create_date | datetime     | NOT NULL.    |
+| file_name   | varchar(255) | NULL.        |
 
 
 
@@ -119,6 +121,8 @@ This is the structure for the database in this project:
 | comment_id  | varchar(64)  | PRIMARY KEY. |
 | post_id     | varchar(64)  | FOREIGN KEY. |
 | user_id     | varchar(64)  | NOT NULL.    |
+| company_id  | varchar(64)  | NOT NULL.    |
+| user_name   | varchar(64)  | NOT NULL.    |
 | content     | varchar(255) | NOT NULL.    |
 | create_date | datetime     | NOT NULL.    |
 | file_name   | varchar(255) | NULL.        |
