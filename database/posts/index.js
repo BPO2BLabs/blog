@@ -42,7 +42,7 @@ function getAllPostsList (offset = 0, limit = 10) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
+      SELECT *
       FROM posts
       ORDER BY create_date DESC
       LIMIT ?, ?
@@ -62,7 +62,7 @@ function getPostsList (userId, offset = 0, limit = 10) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
+      SELECT *
       FROM posts
       WHERE user_id = ?
       ORDER BY create_date DESC
@@ -83,7 +83,7 @@ function getRecentPostsList (offset = 0, limit = 10, companyID) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
+      SELECT *
       FROM posts
       WHERE company_id = ?
       ORDER BY create_date DESC
@@ -145,7 +145,7 @@ function getPost (postId) {
   return new Promise((resolve, reject) => {
     try {
       const sql = `
-      SELECT post_id, content, create_date, file_name, user_id, user_name, company_id
+      SELECT *
       FROM posts
       WHERE post_id = ?
       `
