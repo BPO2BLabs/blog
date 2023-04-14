@@ -149,15 +149,15 @@ There are five endpoints
 
 ### /posts
 
-#### GET (/):{ message, []posts }
+#### GET (/):{ message, []posts, count }
 
 **QUERY PARAMS**
 - limit (default: 10): A **number** that describes how many posts retrieve. MAX 10, MIN 1
 
 - offset (default: 0): A **number** that describes how many posts skip before retrieve. MIN 0
 
-**BODY PARAMS**
-- companyID (required): A valid companyID associated with posts.
+**HEADERS**
+- company-id (required): A valid companyID associated with posts.
 
 #### POST (/):{ message, postId }
 
@@ -173,7 +173,7 @@ There are five endpoints
 **HEADERS**
 - company-id (required): A valid companyID to save in the post.
 
-#### POST (/user):{ message, []posts }
+#### POST (/user):{ message, []posts, count }
 
 **QUERY PARAMS**
 - limit (default: 10): A **number** that describes how many posts retrieve. MAX 10, MIN 1
@@ -183,7 +183,10 @@ There are five endpoints
 **BODY PARAMS**
 - userId (required): A valid userId to associate the post.
 
-#### POST (/replied):{ message, []posts }
+**HEADERS**
+- company-id (required): A valid companyID to save in the post.
+
+#### POST (/replied):{ message, []posts, count }
 
 **QUERY PARAMS**
 - limit (default: 10): A **number** that describes how many posts retrieve. MAX 10, MIN 1
@@ -192,6 +195,19 @@ There are five endpoints
 
 **BODY PARAMS**
 - userId (required): A valid userId to associate the post.
+
+**HEADERS**
+- company-id (required): A valid companyID to save in the post.
+
+#### POST (/advice):{ message, []posts, count }
+
+**QUERY PARAMS**
+- limit (default: 10): A **number** that describes how many posts retrieve. MAX 10, MIN 1
+
+- offset (default: 0): A **number** that describes how many posts skip before retrieve. MIN 0
+
+**HEADERS**
+- company-id (required): A valid companyID to save in the post.
 
 #### GET(/:postId):{ message, {}post }
 
@@ -216,13 +232,14 @@ There are five endpoints
 
 - content (required): Text to save in the post. MAX 255 Characteres.
 
-- attachment (file, optional): File to associate with the comment.
-
 - userName (required): A valid username to save with the comment.
 
-- companyID (required): A valid companyID to save with the comment.
+- attachment (file, optional): File to associate with the comment.
 
-#### POST (/list):{ message, []comments }
+**HEADERS**
+- company-id (required): A valid companyID to save in the post.
+
+#### POST (/list):{ message, []comments, count }
 
 **QUERY PARAMS**
 - limit (default: 10): A **number** that describes how many comments retrieve. MAX 10, MIN 1
@@ -250,6 +267,39 @@ There are five endpoints
 
 **PARAMS**
 - fileId(required): A valid fileId value.
+
+### /admin
+
+#### GET(/posts):{ message, []posts, count }
+
+**QUERY PARAMS**
+- limit (default: 10): A **number** that describes how many comments retrieve. MAX 10, MIN 1
+
+- offset (default: 0): A **number** that describes how many comments skip before retrieve. MIN 0
+
+#### POST(/posts):{ postID, message }
+
+**BODY PARAMS**
+- userId (required): A valid userId to associate the post.
+
+- content (required): Text to save in the post. MAX 255 Characteres.
+
+- userName (required): A valid username to save with the post.
+
+- allowedCompanies (required): A valid array of companies IDs to save with the post.
+
+- attachment (file, optional): File to associate with the comment.
+
+- isolated (default: false): An option to create the post as global for all allowedCompanies or a single post for each allowedCompanies
+
+**HEADERS**
+- company-id (required): A valid companyID to save in the post.
+
+#### DELETE(/post):{ message }
+
+**BODY PARAMS**
+- id(required): A valid postId value.
+
 
 ### /auth
 
