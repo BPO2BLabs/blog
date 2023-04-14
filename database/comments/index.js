@@ -1,4 +1,5 @@
 const { uuid, isUuid } = require('uuidv4')
+const { obtenerFechaHoraMySQL } = require('../utils/index')
 const conn = require('../connection')
 
 function getCountAllCommentsByPost (postID) {
@@ -46,7 +47,7 @@ function getCommentsList (postId, offset = 0, limit = 10) {
 function insertComment (comment) {
   try {
     const { userId, postId, content, fileName, userName, companyID } = comment
-    const createdAt = new Date(Date.now()).toISOString()
+    const createdAt = obtenerFechaHoraMySQL()
     const id = uuid()
     const sql = `
     INSERT INTO comments (comment_id, user_id, post_id, content, create_date, file_name, user_name, company_id)

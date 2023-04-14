@@ -87,6 +87,7 @@ There is a list of all enviroment variables used in this project and their descr
 | DB_USER               | STRING | Database user with premission for read and write |
 | DB_PASS               | STRING | Database password for Database user              |
 | DB_NAME               | STRING | Database table name                              |
+| JWT_SECRET            | STRING | JWT Secret key                                   |
 | AWS_ACCESS_KEY_ID     | STRING | AWS AKI for an user with permissions for S3      |
 | AWS_SECRET_ACCESS_KEY | STRING | AWS SAK for an user with permissions for S3      |
 | AWS_REGION            | STRING | AWS Region where the bucket is hosted            |
@@ -112,6 +113,12 @@ This is the structure for the database in this project:
 | create_date    | datetime     | NOT NULL.    |
 | file_name      | varchar(255) | NULL.        |
 
+
+### Advice
+| NAME              | TYPE         | DESCRIPTION  |
+|:-----------------:|:------------:|:------------:|
+| advice_id         | varchar(64)  | PRIMARY KEY. |
+| post_id           | varchar(64)  | NOT NULL.    |
 
 
 ### Comments
@@ -162,7 +169,8 @@ There are five endpoints
 
 - userName (required): A valid username to save in the post.
 
-- companyID (required): A valid companyID to save in the post.
+**HEADERS**
+- company-id (required): A valid companyID to save in the post.
 
 #### POST (/user):{ message, []posts }
 

@@ -1,4 +1,5 @@
 const { uuid, isUuid } = require('uuidv4')
+const { obtenerFechaHoraMySQL } = require('../utils/index')
 const conn = require('../connection')
 
 function getCountAllPosts () {
@@ -127,7 +128,7 @@ function insertPost (post) {
   try {
     const { userId, content, fileName, userName, companyID } = post
     const id = uuid()
-    const currentDate = new Date(Date.now()).toISOString()
+    const currentDate = obtenerFechaHoraMySQL()
     const sql = `
     INSERT INTO posts (post_id, user_id, content, file_name, create_date, user_name, company_id)
     VALUES (?, ?, ?, ?, ?, ?, ?)

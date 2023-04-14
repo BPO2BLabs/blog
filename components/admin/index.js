@@ -1,6 +1,6 @@
 const express = require('express')
 
-module.exports = ({ posts }) => {
+module.exports = ({ posts, advice }, { fileManager }) => {
   const router = express.Router()
 
   router.route('/posts')
@@ -8,7 +8,6 @@ module.exports = ({ posts }) => {
       async (req, res) => {
         try {
           const { limit = 10, offset = 0 } = req.query
-          // const companyID = req.headers['company-id']
 
           const [postsList, countRows] = await Promise.all([
             posts.getAllPostsList(offset, limit),
@@ -19,6 +18,32 @@ module.exports = ({ posts }) => {
             posts: postsList,
             count: countRows,
             message: 'Posts list retrieved successfully'
+          })
+        } catch (error) {
+          res.status(500).send(error)
+        }
+      })
+    .post(
+      async (req, res) => {
+        try {
+          const companyID = req.headers['company-id']
+          const { userId, userName, content, allowedCompanies } = req.body
+          const files = await fileManager.uploadFiles(req.files)
+
+          const post = {
+            userId,
+            content,
+            fileName: JSON.stringify({ files }),
+            userName,
+            companyID
+          }
+
+          const postID = await posts.insertPost(post)
+          await advice.insertManyAdviceGlobal(postID, allowedCompanies)
+
+          return res.status(200).json({
+            postID,
+            message: 'Post created successfully'
           })
         } catch (error) {
           res.status(500).send(error)
@@ -41,6 +66,3 @@ module.exports = ({ posts }) => {
     )
   return router
 }
-
-// Post comments totales
-// comments totales
