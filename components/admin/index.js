@@ -27,7 +27,7 @@ module.exports = ({ posts, advice }, { fileManager }) => {
       async (req, res) => {
         try {
           const companyID = req.headers['company-id']
-          const { userId, userName, content, allowedCompanies } = req.body
+          const { userId, userName, content, allowedCompanies, isolated = false } = req.body
           const files = await fileManager.uploadFiles(req.files)
 
           const post = {
@@ -38,13 +38,21 @@ module.exports = ({ posts, advice }, { fileManager }) => {
             companyID
           }
 
-          const postID = await posts.insertPost(post)
-          await advice.insertManyAdviceGlobal(postID, allowedCompanies)
-
-          return res.status(200).json({
-            postID,
-            message: 'Post created successfully'
-          })
+          if (isolated) {
+            const ids = await posts.insertManyReplicaPosts(post, allowedCompanies.length)
+            await advice.insertManyAdviceIsolated(ids, allowedCompanies)
+            return res.status(200).json({
+              postID: ids,
+              message: 'Post created successfully'
+            })
+          } else {
+            const postID = await posts.insertPost(post)
+            await advice.insertManyAdviceGlobal(postID, allowedCompanies)
+            return res.status(200).json({
+              postID,
+              message: 'Post created successfully'
+            })
+          }
         } catch (error) {
           res.status(500).send(error)
         }

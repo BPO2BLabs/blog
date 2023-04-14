@@ -119,6 +119,7 @@ This is the structure for the database in this project:
 |:-----------------:|:------------:|:------------:|
 | advice_id         | varchar(64)  | PRIMARY KEY. |
 | post_id           | varchar(64)  | NOT NULL.    |
+| company_id        | varchar(64)  | NOT NULL.    |
 
 
 ### Comments

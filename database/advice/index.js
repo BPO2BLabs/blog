@@ -10,6 +10,17 @@ function insertManyAdviceGlobal (postID, allowedCompanies) {
   })
 }
 
+function insertManyAdviceIsolated (postsIDs, companiesIDs) {
+  const query = 'INSERT INTO advice (post_id, company_id) VALUES ?'
+  return new Promise((resolve, reject) => {
+    conn.query(query, [companiesIDs.map((company, idx) => [postsIDs[idx], company])], (err, result) => {
+      if (err) reject(err)
+      resolve(result)
+    })
+  })
+}
+
 module.exports = {
-  insertManyAdviceGlobal
+  insertManyAdviceGlobal,
+  insertManyAdviceIsolated
 }

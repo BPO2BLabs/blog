@@ -87,9 +87,6 @@ function getPostsList (userId, offset = 0, limit = 10) {
 }
 
 function getRecentPostsList (offset = 0, limit = 10, companyID) {
-  offset = parseInt(offset)
-  limit = parseInt(limit)
-
   return new Promise((resolve, reject) => {
     try {
       const sql = `
@@ -211,7 +208,7 @@ function getAllSysAdminPosts (offset = 0, limit = 10, companyID) {
   })
 }
 
-function getCountAllSysAdminPosts(companyID) {
+function getCountAllSysAdminPosts (companyID) {
   const query = `
   SELECT COUNT(*) AS rowsCount
   FROM posts
@@ -226,6 +223,31 @@ function getCountAllSysAdminPosts(companyID) {
   })
 }
 
+function insertManyReplicaPosts (postToSend, totalReplicas) {
+  const query = `
+  INSERT INTO posts (post_id, user_id, content, file_name, create_date, user_name, company_id)
+  VALUES ?
+    `
+  const ids = []
+  for (let i = 0; i < totalReplicas; i++) { ids.push(uuid()) }
+  const currentDate = obtenerFechaHoraMySQL()
+  const posts = Array(totalReplicas).fill(postToSend)
+  try {
+    conn.query(query, [posts.map((post, index) => [
+      ids[index],
+      post.userId,
+      post.content,
+      post.fileName,
+      currentDate,
+      post.userName,
+      post.companyID
+    ])])
+    return ids
+  } catch (err) {
+    throw new Error(err)
+  }
+}
+
 module.exports = {
   insertPost,
   getPostsList,
@@ -237,5 +259,6 @@ module.exports = {
   getCountAllPostByCompany,
   getCountAllPosts,
   getAllSysAdminPosts,
-  getCountAllSysAdminPosts
+  getCountAllSysAdminPosts,
+  insertManyReplicaPosts
 }
