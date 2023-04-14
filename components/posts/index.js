@@ -111,6 +111,32 @@ module.exports = ({ posts }, { fileManager, validationComponent }) => {
         }
       })
 
+  router.route('/advice')
+    .get(
+      validationComponent.validatePaginationQueries,
+      async (req, res) => {
+        try {
+          const companyID = req.headers['company-id']
+          const { limit = 10, offset = 0 } = req.query
+
+          const [postsList, countRows] = await Promise.all([
+            posts.getAllSysAdminPosts(offset, limit, companyID),
+            posts.getCountAllSysAdminPosts(companyID)
+          ])
+
+          return res.status(200).json({
+            message: 'Posts retrieved successfully',
+            posts: postsList,
+            count: countRows
+          })
+        } catch (err) {
+          res.status(500).json({
+            message: err.message
+          })
+        }
+      }
+    )
+
   router.route('/:postId')
     .get(
       async (req, res) => {

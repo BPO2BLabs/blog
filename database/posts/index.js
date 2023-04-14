@@ -40,6 +40,9 @@ function getCountAllPostByCompany (companyID) {
 }
 
 function getAllPostsList (offset = 0, limit = 10) {
+  offset = parseInt(offset)
+  limit = parseInt(limit)
+
   return new Promise((resolve, reject) => {
     try {
       const sql = `
@@ -60,6 +63,9 @@ function getAllPostsList (offset = 0, limit = 10) {
 }
 
 function getPostsList (userId, offset = 0, limit = 10) {
+  offset = parseInt(offset)
+  limit = parseInt(limit)
+
   return new Promise((resolve, reject) => {
     try {
       const sql = `
@@ -81,6 +87,9 @@ function getPostsList (userId, offset = 0, limit = 10) {
 }
 
 function getRecentPostsList (offset = 0, limit = 10, companyID) {
+  offset = parseInt(offset)
+  limit = parseInt(limit)
+
   return new Promise((resolve, reject) => {
     try {
       const sql = `
@@ -101,7 +110,10 @@ function getRecentPostsList (offset = 0, limit = 10, companyID) {
   })
 }
 
-function getRecentRepliedPostsList (userId, offset, limit) {
+function getRecentRepliedPostsList (userId, offset = 0, limit = 10) {
+  offset = parseInt(offset)
+  limit = parseInt(limit)
+
   return new Promise((resolve, reject) => {
     try {
       const sql = `
@@ -175,6 +187,45 @@ function deletePost (postId) {
   }
 }
 
+function getAllSysAdminPosts (offset = 0, limit = 10, companyID) {
+  offset = parseInt(offset)
+  limit = parseInt(limit)
+
+  const query = `
+  SELECT posts.*
+  FROM posts
+  JOIN advice ON posts.post_id = advice.post_id
+  WHERE advice.company_id = ?
+  ORDER BY posts.create_date DESC
+  LIMIT ?, ?
+  `
+  return new Promise((resolve, reject) => {
+    try {
+      conn.query(query, [companyID, offset, limit], (err, rows) => {
+        if (err) { reject(err) }
+        resolve(rows)
+      })
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
+function getCountAllSysAdminPosts(companyID) {
+  const query = `
+  SELECT COUNT(*) AS rowsCount
+  FROM posts
+  JOIN advice ON posts.post_id = advice.post_id
+  WHERE advice.company_id = ?
+  `
+  return new Promise((resolve, reject) => {
+    conn.query(query, [companyID], (err, rows) => {
+      if (err) { reject(err) }
+      resolve(rows[0].rowsCount)
+    })
+  })
+}
+
 module.exports = {
   insertPost,
   getPostsList,
@@ -184,5 +235,7 @@ module.exports = {
   deletePost,
   getAllPostsList,
   getCountAllPostByCompany,
-  getCountAllPosts
+  getCountAllPosts,
+  getAllSysAdminPosts,
+  getCountAllSysAdminPosts
 }
