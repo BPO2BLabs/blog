@@ -39,7 +39,7 @@ module.exports = ({ posts, advice }, { fileManager }) => {
             companyID
           }
 
-          if (isolated) {
+          if (isolated === 'true') {
             const ids = await posts.insertManyReplicaPosts(post, parsedAllowedCompanies.length)
             await advice.insertManyAdviceIsolated(ids, parsedAllowedCompanies)
             return res.status(200).json({
