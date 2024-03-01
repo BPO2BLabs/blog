@@ -1,6 +1,8 @@
 name: Deploy to production
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
 
 env:
   ECS_CLUSTER: blog-tool-cluster
