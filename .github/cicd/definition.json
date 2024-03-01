@@ -1,0 +1,40 @@
+{
+  "containerDefinitions": [
+      {
+          "name": "blog-tool-container",
+          "portMappings": [
+              {
+                  "containerPort": 80,
+                  "hostPort": 80,
+                  "protocol": "tcp",
+                  "appProtocol": "http"
+              }
+          ],
+          "essential": true
+      }
+  ],
+  "family": "blog-tool-task",
+  "taskRoleArn": "arn:aws:iam::488630032666:role/AWSECSTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::488630032666:role/AWSECSTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+      {
+        "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+      },
+      {
+        "name": "ecs.capability.task-eni"
+      }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+      "EC2",
+      "FARGATE"
+  ],
+  "requiresCompatibilities": [
+      "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512"
+}
