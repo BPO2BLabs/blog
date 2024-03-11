@@ -12,4 +12,7 @@ module.exports = (app, database, utils) => {
   app.use('/auth', auth(database, utils))
   app.use('/consult', consult(database, utils))
   app.use('/admin', admin(database, utils))
+  app.use('/', (_req, res) => {
+    res.status(200).send('Welcome to the API')
+  })
 }
